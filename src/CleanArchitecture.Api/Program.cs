@@ -1,25 +1,30 @@
+using CleanArchitecture.Api;
+using CleanArchitecture.Api.Extensions;
 using CleanArchitecture.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddSwagger(builder.Configuration);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddPresentation(builder.Configuration)
+                .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    await app.ApplyMigrationsAsync(CancellationToken.None);
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

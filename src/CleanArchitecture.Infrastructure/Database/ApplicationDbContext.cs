@@ -16,6 +16,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<IdentityUser<Guid>,
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
