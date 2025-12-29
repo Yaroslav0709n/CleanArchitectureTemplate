@@ -1,5 +1,9 @@
-﻿using CleanArchitecture.Application.Data;
+﻿using CleanArchitecture.Application.Abstractions.CurrentUser;
+using CleanArchitecture.Application.Abstractions.Data;
+using CleanArchitecture.Application.Abstractions.Time;
+using CleanArchitecture.Infrastructure.Authentication;
 using CleanArchitecture.Infrastructure.Database;
+using CleanArchitecture.Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +24,12 @@ public static class DependencyInjection
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+        services.AddScoped<ICurrentUser, CurrentUser>();
+
+        services.AddScoped(sp => (ICurrentUserInitializer)sp.GetRequiredService<ICurrentUser>());
+
         return services;
     }
 

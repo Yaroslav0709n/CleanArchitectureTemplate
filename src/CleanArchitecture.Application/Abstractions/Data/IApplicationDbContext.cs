@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Domain.Organizations;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Application.Data;
+namespace CleanArchitecture.Application.Abstractions.Data;
 
 public interface IApplicationDbContext
 {

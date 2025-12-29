@@ -1,12 +1,13 @@
-﻿using CleanArchitecture.Application.Data;
+﻿using CleanArchitecture.Application.Abstractions.Data;
 using CleanArchitecture.Domain.Organizations;
+using CleanArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Database;
 
-public sealed class ApplicationDbContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>, IdentityUserRole<Guid>, IdentityUserLogin<Guid>,  IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>, IApplicationDbContext
+public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>, IdentityUserRole<Guid>, IdentityUserLogin<Guid>,  IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {

@@ -1,0 +1,10 @@
+﻿using CleanArchitecture.Application.Users.Dto;
+
+namespace CleanArchitecture.Application.Abstractions.Identity;
+
+public interface IIdentityService
+{
+    Task<UserResponse> GetByEmailAsync(string email, CancellationToken cancellationToken);
+    Task<UserResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<bool> CheckPasswordAsync(string email, string password, CancellationToken cancellationToken);
+}

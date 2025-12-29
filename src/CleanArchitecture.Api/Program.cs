@@ -28,6 +28,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseCurrentUserMiddleware();
+
 app.MapControllers();
 
 app.Run();

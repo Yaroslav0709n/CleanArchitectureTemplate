@@ -14,8 +14,12 @@ public static class DependencyInjection
 
         services.AddScoped<ExceptionMiddleware>();
 
+        services.AddScoped<CurrentUserMiddleware>();
+
         return services;
     }
 
     public static IApplicationBuilder UseExceptionMiddleware(this IApplicationBuilder app) => app.UseMiddleware<ExceptionMiddleware>();
+
+    public static IApplicationBuilder UseCurrentUserMiddleware(this IApplicationBuilder app) => app.UseMiddleware<CurrentUserMiddleware>();
 }
