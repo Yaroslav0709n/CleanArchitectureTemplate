@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Application.Abstractions.Data;
 using CleanArchitecture.Application.Abstractions.Messaging;
 using CleanArchitecture.Application.Addresses.Dto;
+using CleanArchitecture.Application.Mappers;
 using CleanArchitecture.Application.Organizations.Dto;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,25 +18,8 @@ internal sealed class GetOrganizationByIdQueryHandler : IQueryHandler<GetOrganiz
 
     public async Task<OrganizationResponse> Handle(GetOrganizationByIdQuery query, CancellationToken cancellationToken)
     {
-        var organization = await _context.Organizations.Select(x => new OrganizationResponse
-                                                       {
-                                                            Id = x.Id,
-                                                            Name = x.Name,
-                                                            Phone = x.Phone,
-                                                            Fax = x.Fax,
-                                                            Email = x.Email,
-                                                            Address = new AddressResponse
-                                                            {
-                                                                City = x.Address.City,
-                                                                Street = x.Address.Street,
-                                                                HomeNumber = x.Address.HomeNumber,
-                                                                ApartmentNumber = x.Address.ApartmentNumber,
-                                                                ZipCode = x.Address.ZipCode,
-                                                                MailBox = x.Address.MailBox
-                                                            }
-                                                       })
-                                                       .FirstOrDefaultAsync(x => x.Id == query.Id);
+        var organization = await _context.Organizations.FirstOrDefaultAsync(x => x.Id == query.Id);
 
-        return organization;
+        return organization?.ToOrganizationResponse();
     }
 }

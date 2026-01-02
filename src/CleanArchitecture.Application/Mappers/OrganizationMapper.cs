@@ -17,4 +17,16 @@ public static class OrganizationMapper
             Address = organization.Address?.ToAddressResponse()
         };
     }
+
+    public static IEnumerable<OrganizationResponse> ToOrganizationResponseList(this IEnumerable<Organization> organizations)
+    {
+        var result = new List<OrganizationResponse>();
+
+        foreach (var organization in organizations)
+        {
+            result.Add(organization.ToOrganizationResponse());
+        }
+
+        return result;
+    }
 }

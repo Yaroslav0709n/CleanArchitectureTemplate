@@ -1,5 +1,6 @@
 using CleanArchitecture.Application.Abstractions.Data;
 using CleanArchitecture.Application.Abstractions.Messaging;
+using CleanArchitecture.Domain.Addresses;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Organizations.Update;
@@ -26,12 +27,15 @@ internal sealed class UpdateOrganizationCommandHandler : ICommandHandler<UpdateO
         organization.Phone = command.Phone;
         organization.Fax = command.Fax;
         organization.Email = command.Email;
-        organization.Address.City = command.Address?.City;
-        organization.Address.Street = command.Address?.Street;
-        organization.Address.HomeNumber = command.Address?.HomeNumber;
-        organization.Address.ApartmentNumber = command.Address?.ApartmentNumber;
-        organization.Address.ZipCode = command.Address?.ZipCode;
-        organization.Address.MailBox = command.Address?.MailBox;
+        organization.Address = new Address
+        {
+            City = command.Address?.City,
+            Street = command.Address?.Street,
+            HomeNumber = command.Address?.HomeNumber,
+            ApartmentNumber = command.Address?.ApartmentNumber,
+            ZipCode = command.Address?.ZipCode,
+            MailBox = command.Address?.MailBox
+        };
 
         await _context.SaveChangesAsync(cancellationToken);
 
