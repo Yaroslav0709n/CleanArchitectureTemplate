@@ -27,7 +27,7 @@ public class OrganizationController : VersionedApiController
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<OrganizationResponse> GetListAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<OrganizationResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetOrganizationByIdQuery(id);
 

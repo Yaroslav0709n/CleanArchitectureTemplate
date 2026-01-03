@@ -21,7 +21,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, string>
     {
         var user = await _identityService.GetByEmailAsync(command.Email, cancellationToken);
 
-        if (user is null)
+        if (user == null)
         {
             throw new UnauthorizedException("Authentication failed.");
         }
