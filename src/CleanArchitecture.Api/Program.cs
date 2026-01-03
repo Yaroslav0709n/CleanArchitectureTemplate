@@ -1,12 +1,14 @@
 using CleanArchitecture.Api;
 using CleanArchitecture.Api.Extensions;
+using CleanArchitecture.Application;
 using CleanArchitecture.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwagger(builder.Configuration);
 
-builder.Services.AddPresentation(builder.Configuration)
+builder.Services.AddApplication()
+                .AddPresentation(builder.Configuration)
                 .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
