@@ -4,9 +4,9 @@ using FluentValidation.Results;
 
 namespace CleanArchitecture.Application.Abstractions.Behaviors;
 
-internal static class ValidationDecorator
+public class ValidationDecorator
 {
-    internal sealed class CommandHandler<TCommand, TResponse>(ICommandHandler<TCommand, TResponse> innerHandler, IEnumerable<IValidator<TCommand>> validators) : ICommandHandler<TCommand, TResponse>
+    public class CommandHandler<TCommand, TResponse>(ICommandHandler<TCommand, TResponse> innerHandler, IEnumerable<IValidator<TCommand>> validators) : ICommandHandler<TCommand, TResponse>
         where TCommand : ICommand<TResponse>
     {
         public async Task<TResponse> Handle(TCommand command, CancellationToken cancellationToken)
@@ -22,7 +22,7 @@ internal static class ValidationDecorator
         }
     }
 
-    internal sealed class CommandBaseHandler<TCommand>(ICommandHandler<TCommand> innerHandler, IEnumerable<IValidator<TCommand>> validators) : ICommandHandler<TCommand>
+    public class CommandBaseHandler<TCommand>(ICommandHandler<TCommand> innerHandler, IEnumerable<IValidator<TCommand>> validators) : ICommandHandler<TCommand>
         where TCommand : ICommand
     {
         public async Task Handle(TCommand command, CancellationToken cancellationToken)
