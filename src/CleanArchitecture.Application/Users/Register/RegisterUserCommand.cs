@@ -1,5 +1,11 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
 
-namespace Application.Users.Register;
+namespace CleanArchitecture.Application.Users.Register;
 
-public sealed record RegisterUserCommand(string Email, string FirstName, string LastName, string Password) : ICommand<Guid>;
+public class RegisterUserCommand : ICommand
+{
+    public string Email { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Password { get; set; }
+}

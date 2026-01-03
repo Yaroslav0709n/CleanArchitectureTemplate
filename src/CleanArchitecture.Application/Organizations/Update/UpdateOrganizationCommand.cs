@@ -1,9 +1,9 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Addresses.Dto;
+using CleanArchitecture.Application.Dtos.Addresses;
 
 namespace CleanArchitecture.Application.Organizations.Update;
 
-public sealed class UpdateOrganizationCommand : ICommand<Guid>
+public class UpdateOrganizationCommand : ICommand<Guid>
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

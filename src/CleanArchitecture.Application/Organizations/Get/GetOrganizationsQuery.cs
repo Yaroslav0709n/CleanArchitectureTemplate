@@ -1,6 +1,8 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Organizations.Dto;
+using CleanArchitecture.Application.Dtos.Addresses;
 
 namespace CleanArchitecture.Application.Organizations.Get;
 
-public sealed record GetOrganizationsQuery() : IQuery<IEnumerable<OrganizationResponse>>;
+public class GetOrganizationsQuery : IQuery<IEnumerable<OrganizationResponse>>
+{
+}

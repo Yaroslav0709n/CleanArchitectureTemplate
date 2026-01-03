@@ -1,9 +1,9 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Addresses.Dto;
+using CleanArchitecture.Application.Dtos.Addresses;
 
 namespace CleanArchitecture.Application.Organizations.Create;
 
-public sealed class CreateOrganizationCommand : ICommand<Guid>
+public class CreateOrganizationCommand : ICommand<Guid>
 {
     public string Name { get; set; }
     public string Phone { get; set; }

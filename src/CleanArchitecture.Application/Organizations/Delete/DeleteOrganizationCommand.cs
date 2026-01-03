@@ -2,4 +2,7 @@
 
 namespace CleanArchitecture.Application.Organizations.Delete;
 
-public sealed record DeleteOrganizationCommand(Guid Id) : ICommand;
+public class DeleteOrganizationCommand : ICommand
+{
+    public Guid Id { get; set; }
+}

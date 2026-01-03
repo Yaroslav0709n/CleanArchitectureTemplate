@@ -1,6 +1,8 @@
 ﻿using CleanArchitecture.Application.Abstractions.CurrentUser;
 using CleanArchitecture.Application.Abstractions.Data;
 using CleanArchitecture.Application.Abstractions.Time;
+using CleanArchitecture.Application.Abstractions.Token;
+using CleanArchitecture.Application.Settings;
 using CleanArchitecture.Infrastructure.Authentication;
 using CleanArchitecture.Infrastructure.Database;
 using CleanArchitecture.Infrastructure.Time;
@@ -17,18 +19,18 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) =>
         services
-            .AddServices()
+            .AddServices(configuration)
             .AddDatabase(configuration)
             .AddAuthenticationInternal(configuration)
             .AddAuthorizationInternal();
 
-    private static IServiceCollection AddServices(this IServiceCollection services)
+    private static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
         services.AddScoped<ICurrentUser, CurrentUser>();
-
+        services.AddScoped<ITokenProvider, TokenProvider>();
         services.AddScoped(sp => (ICurrentUserInitializer)sp.GetRequiredService<ICurrentUser>());
+        services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
         return services;
     }

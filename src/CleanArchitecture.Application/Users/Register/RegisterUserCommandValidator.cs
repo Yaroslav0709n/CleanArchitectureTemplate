@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 
-namespace Application.Users.Register;
+namespace CleanArchitecture.Application.Users.Register;
 
-internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
+public class LoginUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {
-    public RegisterUserCommandValidator()
+    public LoginUserCommandValidator()
     {
-        RuleFor(c => c.FirstName).NotEmpty();
-        RuleFor(c => c.LastName).NotEmpty();
-        RuleFor(c => c.Email).NotEmpty().EmailAddress();
-        RuleFor(c => c.Password).NotEmpty().MinimumLength(8);
+        RuleFor(x => x.FirstName).NotEmpty();
+        RuleFor(x => x.LastName).NotEmpty();
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.Password).NotEmpty().MinimumLength(8);
     }
 }

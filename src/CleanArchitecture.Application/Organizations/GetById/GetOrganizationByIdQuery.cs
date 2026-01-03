@@ -1,6 +1,9 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Organizations.Dto;
+using CleanArchitecture.Application.Dtos.Addresses;
 
 namespace CleanArchitecture.Application.Organizations.GetById;
 
-public sealed record GetOrganizationByIdQuery(Guid Id) : IQuery<OrganizationResponse>;
+public class GetOrganizationByIdQuery : IQuery<OrganizationResponse>
+{
+    public Guid Id { get; set; }
+}

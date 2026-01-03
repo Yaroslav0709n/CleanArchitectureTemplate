@@ -1,6 +1,9 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Users.Dto;
+using CleanArchitecture.Application.Dtos.Users;
 
-namespace Application.Users.GetById;
+namespace CleanArchitecture.Application.Users.GetById;
 
-public sealed record GetUserByIdQuery(Guid UserId) : IQuery<UserResponse>;
+public class GetUserByIdQuery : IQuery<UserResponse>
+{
+    public Guid Id { get; set; }
+}

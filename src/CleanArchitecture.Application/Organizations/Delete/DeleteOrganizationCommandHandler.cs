@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Organizations.Delete;
 
-internal sealed class DeleteOrganizationCommandHandler : ICommandHandler<DeleteOrganizationCommand>
+public class DeleteOrganizationCommandHandler : ICommandHandler<DeleteOrganizationCommand>
 {
     private readonly IApplicationDbContext _context;
 

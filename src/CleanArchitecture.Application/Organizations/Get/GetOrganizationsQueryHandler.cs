@@ -1,12 +1,12 @@
 ﻿using CleanArchitecture.Application.Abstractions.Data;
 using CleanArchitecture.Application.Abstractions.Messaging;
+using CleanArchitecture.Application.Dtos.Addresses;
 using CleanArchitecture.Application.Mappers;
-using CleanArchitecture.Application.Organizations.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Organizations.Get;
 
-internal sealed class GetOrganizationsQueryHandler : IQueryHandler<GetOrganizationsQuery, IEnumerable<OrganizationResponse>>
+public class GetOrganizationsQueryHandler : IQueryHandler<GetOrganizationsQuery, IEnumerable<OrganizationResponse>>
 {
     private readonly IApplicationDbContext _context;
 

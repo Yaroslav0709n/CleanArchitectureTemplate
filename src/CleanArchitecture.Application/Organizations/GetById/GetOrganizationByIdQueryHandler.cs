@@ -1,13 +1,12 @@
 ﻿using CleanArchitecture.Application.Abstractions.Data;
 using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Addresses.Dto;
+using CleanArchitecture.Application.Dtos.Addresses;
 using CleanArchitecture.Application.Mappers;
-using CleanArchitecture.Application.Organizations.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Organizations.GetById;
 
-internal sealed class GetOrganizationByIdQueryHandler : IQueryHandler<GetOrganizationByIdQuery, OrganizationResponse>
+public class GetOrganizationByIdQueryHandler : IQueryHandler<GetOrganizationByIdQuery, OrganizationResponse>
 {
     private readonly IApplicationDbContext _context;
 
@@ -18,7 +17,7 @@ internal sealed class GetOrganizationByIdQueryHandler : IQueryHandler<GetOrganiz
 
     public async Task<OrganizationResponse> Handle(GetOrganizationByIdQuery query, CancellationToken cancellationToken)
     {
-        var organization = await _context.Organizations.FirstOrDefaultAsync(x => x.Id == query.Id);
+        var organization = await _context.Organizations.FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
         return organization?.ToOrganizationResponse();
     }

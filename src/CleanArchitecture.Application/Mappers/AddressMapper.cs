@@ -1,13 +1,13 @@
-﻿using CleanArchitecture.Application.Addresses.Dto;
+﻿using CleanArchitecture.Application.Dtos.Addresses;
 using CleanArchitecture.Domain.Addresses;
 
 namespace CleanArchitecture.Application.Mappers;
 
 public static class AddressMapper
 {
-    public static AddressResponse ToAddressResponse(this Address address)
+    public static AddressDto ToAddressDto(this Address address)
     {
-        return new AddressResponse
+        return new AddressDto
         {
             City = address.City,
             Street = address.Street,

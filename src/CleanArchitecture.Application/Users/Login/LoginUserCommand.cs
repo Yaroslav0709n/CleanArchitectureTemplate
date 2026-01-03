@@ -1,5 +1,9 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
 
-namespace Application.Users.Login;
+namespace CleanArchitecture.Application.Users.Login;
 
-public sealed record LoginUserCommand(string Email, string Password) : ICommand<string>;
+public class LoginUserCommand : ICommand<string>
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+}

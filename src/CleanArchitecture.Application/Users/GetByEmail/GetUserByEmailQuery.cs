@@ -1,6 +1,9 @@
 ﻿using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Users.Dto;
+using CleanArchitecture.Application.Dtos.Users;
 
 namespace CleanArchitecture.Application.Users.GetByEmail;
 
-public sealed record GetUserByEmailQuery(string Email) : IQuery<UserResponse>;
+public class GetUserByEmailQuery : IQuery<UserResponse>
+{
+    public string Email { get; set; }
+}

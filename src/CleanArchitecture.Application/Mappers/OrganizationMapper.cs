@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Organizations.Dto;
+﻿using CleanArchitecture.Application.Dtos.Addresses;
 using CleanArchitecture.Domain.Organizations;
 
 namespace CleanArchitecture.Application.Mappers;
@@ -14,7 +14,7 @@ public static class OrganizationMapper
             Phone = organization.Phone,
             Fax = organization.Fax,
             Email = organization.Email,
-            Address = organization.Address?.ToAddressResponse()
+            Address = organization.Address?.ToAddressDto()
         };
     }
 

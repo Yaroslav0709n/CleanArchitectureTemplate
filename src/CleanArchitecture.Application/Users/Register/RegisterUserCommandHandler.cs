@@ -1,37 +1,33 @@
-﻿//using Application.Abstractions.Authentication;
-//using Application.Abstractions.Data;
-//using Application.Abstractions.Messaging;
-//using CleanArchitecture.Application.Abstractions.Messaging;
-//using Domain.Users;
-//using Microsoft.EntityFrameworkCore;
-//using SharedKernel;
+﻿using CleanArchitecture.Application.Abstractions.Identity;
+using CleanArchitecture.Application.Abstractions.Messaging;
+using CleanArchitecture.Application.Dtos.Users;
 
-//namespace Application.Users.Register;
+namespace CleanArchitecture.Application.Users.Register;
 
-//internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Guid>
-//{
-//    public async Task<Guid> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
-//    {
-//        if (await context.Users.AnyAsync(u => u.Email == command.Email, cancellationToken))
-//        {
-//            return Result.Failure<Guid>(UserErrors.EmailNotUnique);
-//        }
+public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand>
+{
+    private readonly IIdentityService _identityService;
 
-//        var user = new User
-//        {
-//            Id = Guid.NewGuid(),
-//            Email = command.Email,
-//            FirstName = command.FirstName,
-//            LastName = command.LastName,
-//            PasswordHash = passwordHasher.Hash(command.Password)
-//        };
+    public RegisterUserCommandHandler(IIdentityService identityService)
+    {
+        _identityService = identityService;
+    }
 
-//        user.Raise(new UserRegisteredDomainEvent(user.Id));
+    public async Task Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    {
+        if (await _identityService.IsAnyByEmailAsync(command.Email, cancellationToken))
+        {
+            throw new Exception("User already exist by this email.");
+        }
 
-//        context.Users.Add(user);
+        var request = new CreateUserRequest
+        {
+            Email = command.Email,
+            FirstName = command.FirstName,
+            LastName = command.LastName,
+            Password = command.Password
+        };
 
-//        await context.SaveChangesAsync(cancellationToken);
-
-//        return user.Id;
-//    }
-//}
+        await _identityService.CreateAsync(request, cancellationToken);
+    }
+}

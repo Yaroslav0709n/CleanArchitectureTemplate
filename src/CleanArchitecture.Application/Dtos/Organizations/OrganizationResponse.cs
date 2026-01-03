@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Application.Addresses.Dto;
-
-namespace CleanArchitecture.Application.Organizations.Dto;
+﻿namespace CleanArchitecture.Application.Dtos.Addresses;
 
 public sealed class OrganizationResponse
 {
@@ -9,5 +7,5 @@ public sealed class OrganizationResponse
     public string Phone { get; set; }
     public string Fax { get; set; }
     public string Email { get; set; }
-    public AddressResponse? Address { get; set; }
+    public AddressDto? Address { get; set; }
 }

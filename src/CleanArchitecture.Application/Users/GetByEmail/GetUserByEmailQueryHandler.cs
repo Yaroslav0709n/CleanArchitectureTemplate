@@ -1,6 +1,6 @@
 ﻿using CleanArchitecture.Application.Abstractions.Identity;
 using CleanArchitecture.Application.Abstractions.Messaging;
-using CleanArchitecture.Application.Users.Dto;
+using CleanArchitecture.Application.Dtos.Users;
 using CleanArchitecture.Application.Users.GetByEmail;
 
 namespace CleanArchitecture.Application.Users.GetByEmailAsync;

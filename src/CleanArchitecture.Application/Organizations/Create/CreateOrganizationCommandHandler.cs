@@ -5,7 +5,7 @@ using CleanArchitecture.Domain.Organizations;
 
 namespace CleanArchitecture.Application.Organizations.Create;
 
-internal sealed class CreateOrganizationCommandHandler : ICommandHandler<CreateOrganizationCommand, Guid>
+public class CreateOrganizationCommandHandler : ICommandHandler<CreateOrganizationCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 

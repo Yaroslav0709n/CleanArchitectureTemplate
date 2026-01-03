@@ -1,35 +1,44 @@
-﻿//using Application.Abstractions.Authentication;
-//using Application.Abstractions.Data;
-//using Application.Abstractions.Messaging;
-//using CleanArchitecture.Application.Abstractions.Identity;
-//using CleanArchitecture.Application.Abstractions.Messaging;
-//using CleanArchitecture.Application.Exceptions;
-//using Domain.Users;
-//using Microsoft.EntityFrameworkCore;
-//using SharedKernel;
+﻿using CleanArchitecture.Application.Abstractions.Identity;
+using CleanArchitecture.Application.Abstractions.Messaging;
+using CleanArchitecture.Application.Abstractions.Token;
+using CleanArchitecture.Application.Dtos.Tokens;
+using CleanArchitecture.Application.Exceptions;
 
-//namespace Application.Users.Login;
+namespace CleanArchitecture.Application.Users.Login;
 
-//internal sealed class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, string>
-//{
-//    private readonly IIdentityService _identityService;
+public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, string>
+{
+    private readonly IIdentityService _identityService;
+    private readonly ITokenProvider _tokenProvider;
 
-//    public LoginUserCommandHandler(IIdentityService identityService)
-//    {
-//        _identityService = identityService;
-//    }
+    public LoginUserCommandHandler(IIdentityService identityService, ITokenProvider tokenProvider)
+    {
+        _identityService = identityService;
+        _tokenProvider = tokenProvider;
+    }
 
-//    public async Task<string> Handle(LoginUserCommand command, CancellationToken cancellationToken)
-//    {
-//        var verified = await _identityService.CheckPasswordAsync(command.Email, command.Password, cancellationToken);
+    public async Task<string> Handle(LoginUserCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _identityService.GetByEmailAsync(command.Email, cancellationToken);
 
-//        if (!verified)
-//        {
-//            throw new UnauthorizedException("Authentication failed.");
-//        }
+        if (user is null)
+        {
+            throw new UnauthorizedException("Authentication failed.");
+        }
 
-//        string token = tokenProvider.Create(user);
+        var verified = await _identityService.CheckPasswordAsync(command.Email, command.Password, cancellationToken);
 
-//        return token;
-//    }
-//}
+        if (!verified)
+        {
+            throw new UnauthorizedException("Authentication failed.");
+        }
+
+        var token = _tokenProvider.Create(new CreateTokenRequest
+        {
+            UserId = user.Id,
+            UserEmail = user.Email,
+        });
+
+        return token;
+    }
+}

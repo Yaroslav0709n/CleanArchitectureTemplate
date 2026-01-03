@@ -1,6 +1,8 @@
-﻿namespace CleanArchitecture.Application.Abstractions.Token;
+﻿using CleanArchitecture.Application.Dtos.Tokens;
 
-//public interface ITokenProvider
-//{
-//    string Create(User user);
-//}
+namespace CleanArchitecture.Application.Abstractions.Token;
+
+public interface ITokenProvider
+{
+    string Create(CreateTokenRequest request);
+}

@@ -1,6 +1,6 @@
-﻿namespace CleanArchitecture.Application.Addresses.Dto;
+﻿namespace CleanArchitecture.Application.Dtos.Addresses;
 
-public class AddressResponse
+public class AddressDto
 {
     public string? City { get; set; }
     public string? Street { get; set; }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Application.Organizations.Update;
 
-internal sealed class UpdateOrganizationCommandHandler : ICommandHandler<UpdateOrganizationCommand, Guid>
+public class UpdateOrganizationCommandHandler : ICommandHandler<UpdateOrganizationCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
