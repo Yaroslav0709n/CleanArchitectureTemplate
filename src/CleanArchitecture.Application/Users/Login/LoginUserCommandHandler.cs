@@ -33,7 +33,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, string>
             throw new UnauthorizedException("Authentication failed.");
         }
 
-        var token = _tokenProvider.Create(new CreateTokenRequest
+        var token = await _tokenProvider.Create(new CreateTokenRequest
         {
             UserId = user.Id,
             UserEmail = user.Email,

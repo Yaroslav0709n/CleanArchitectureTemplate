@@ -3,16 +3,20 @@ using CleanArchitecture.Application.Abstractions.Data;
 using CleanArchitecture.Application.Abstractions.Identity;
 using CleanArchitecture.Application.Abstractions.Time;
 using CleanArchitecture.Application.Abstractions.Token;
+using CleanArchitecture.Application.Exceptions;
 using CleanArchitecture.Application.Settings;
 using CleanArchitecture.Infrastructure.Authentication;
+using CleanArchitecture.Infrastructure.Authorization;
 using CleanArchitecture.Infrastructure.Database;
 using CleanArchitecture.Infrastructure.Identity;
 using CleanArchitecture.Infrastructure.Time;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -33,10 +37,13 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<ITokenProvider, TokenProvider>();
         services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IApplicationDbSeeder, ApplicationDbSeeder>();
         services.AddScoped(sp => (ICurrentUserInitializer)sp.GetRequiredService<ICurrentUser>());
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
-        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
             options.User.RequireUniqueEmail = true;
@@ -47,7 +54,7 @@ public static class DependencyInjection
             options.Password.RequireLowercase = false;
             options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ /";
         })
-        .AddRoles<IdentityRole<Guid>>()
+        .AddRoles<ApplicationRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
@@ -75,6 +82,20 @@ public static class DependencyInjection
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
                     ClockSkew = TimeSpan.Zero
+                };
+                o.Events = new JwtBearerEvents
+                {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        if (!context.Response.HasStarted)
+                        {
+                            throw new UnauthorizedException("Authentication Failed.");
+                        }
+
+                        return Task.CompletedTask;
+                    },
+                    OnForbidden = async context => throw new ForbiddenException("You are not authorized to access this resource.")
                 };
             });
 

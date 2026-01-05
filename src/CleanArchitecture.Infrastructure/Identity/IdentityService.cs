@@ -1,5 +1,7 @@
 ﻿using CleanArchitecture.Application.Abstractions.Identity;
 using CleanArchitecture.Application.Dtos.Users;
+using CleanArchitecture.Infrastructure.Authentication;
+using CleanArchitecture.Infrastructure.Database;
 using CleanArchitecture.Infrastructure.Mappers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,14 @@ namespace CleanArchitecture.Infrastructure.Identity;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly ApplicationDbContext _context;
 
-    public IdentityService(UserManager<ApplicationUser> userManager)
+    public IdentityService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext context)
     {
         _userManager = userManager;
+        _roleManager = roleManager;
+        _context = context;
     }
 
     public async Task<UserResponse> GetByEmailAsync(string email, CancellationToken cancellationToken)
@@ -57,5 +63,36 @@ public class IdentityService : IIdentityService
         };
 
         await _userManager.CreateAsync(user, request.Password);
+    }
+
+    public async Task<bool> HasPermissionAsync(Guid userId, string permission)
+    {
+        var permissions = await GetPermissionsAsync(userId);
+
+        return permissions?.Contains(permission) ?? false;
+    }
+
+    public async Task<List<string>> GetPermissionsAsync(Guid userId)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
+        if (user == null)
+        {
+            throw new Exception("User not found.");
+        }
+
+        var userRoles = await _userManager.GetRolesAsync(user);
+
+        var permissions = new List<string>();
+
+        foreach (var role in await _roleManager.Roles.Where(r => userRoles.Contains(r.Name!)).ToListAsync())
+        {
+            permissions.AddRange(await _context.RoleClaims
+                       .Where(rc => rc.RoleId == role.Id && rc.ClaimType == Claims.Permission)
+                       .Select(rc => rc.ClaimValue!)
+                       .ToListAsync());
+        }
+
+        return permissions.Distinct().ToList();
     }
 }
