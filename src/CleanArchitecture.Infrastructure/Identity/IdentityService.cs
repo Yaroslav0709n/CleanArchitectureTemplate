@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Dtos.Users;
 using CleanArchitecture.Infrastructure.Authentication;
 using CleanArchitecture.Infrastructure.Database;
 using CleanArchitecture.Infrastructure.Mappers;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,7 +53,7 @@ public class IdentityService : IIdentityService
         return await _userManager.Users.AnyAsync(x => x.Email == email, cancellationToken);
     }
 
-    public async Task CreateAsync(CreateUserRequest request, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAsync(CreateUserRequest request, CancellationToken cancellationToken)
     {
         var user = new ApplicationUser
         {
@@ -62,7 +63,14 @@ public class IdentityService : IIdentityService
             LastName = request.LastName
         };
 
-        await _userManager.CreateAsync(user, request.Password);
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        if (!result.Succeeded)
+        {
+            throw new Exception(string.Join("; ", result.Errors.Select(x => x.Description)));
+        }
+
+        return user.Id;
     }
 
     public async Task<bool> HasPermissionAsync(Guid userId, string permission)
