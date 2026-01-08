@@ -1,7 +1,6 @@
-﻿using CleanArchitecture.Application.Organizations.Update;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace CleanArchitecture.Application.Organizations.Create;
+namespace CleanArchitecture.Application.Organizations.Update;
 
 public class UpdateRoleCommandValidator : AbstractValidator<UpdateRoleCommand>
 {

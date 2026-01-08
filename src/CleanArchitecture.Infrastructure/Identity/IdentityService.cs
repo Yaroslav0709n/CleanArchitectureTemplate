@@ -96,8 +96,8 @@ public class IdentityService : IIdentityService
         foreach (var role in await _roleManager.Roles.Where(r => userRoles.Contains(r.Name!)).ToListAsync())
         {
             permissions.AddRange(await _context.RoleClaims
-                       .Where(rc => rc.RoleId == role.Id && rc.ClaimType == Claims.Permission)
-                       .Select(rc => rc.ClaimValue!)
+                       .Where(x => x.RoleId == role.Id && x.ClaimType == Claims.Permission)
+                       .Select(x => x.ClaimValue!)
                        .ToListAsync());
         }
 
@@ -114,5 +114,28 @@ public class IdentityService : IIdentityService
         }
 
         return await _userManager.GetRolesAsync(user);
+    }
+
+    public async Task<Guid> UpdateAsync(UpdateUserRequest request, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+
+        if (user == null)
+        {
+            throw new Exception("User not found.");
+        }
+
+        user.Email = request.Email;
+        user.FirstName = request.FirstName;
+        user.LastName = request.LastName;
+
+        var result = await _userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            throw new Exception(string.Join("; ", result.Errors.Select(x => x.Description)));
+        }
+
+        return user.Id;
     }
 }

@@ -4,6 +4,7 @@ using CleanArchitecture.Application.Users.GetByEmail;
 using CleanArchitecture.Application.Users.GetById;
 using CleanArchitecture.Application.Users.Login;
 using CleanArchitecture.Application.Users.Register;
+using CleanArchitecture.Application.Users.Update;
 using CleanArchitecture.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Action = CleanArchitecture.Infrastructure.Authorization.Action;
@@ -44,6 +45,12 @@ public class UserController : VersionedApiController
         var query = new GetUserRolesQuery(id);
 
         return await _queryDispatcher.Dispatch<GetUserRolesQuery, IEnumerable<string>>(query, cancellationToken);
+    }
+
+    [HttpPut]
+    public async Task<Guid> UpdateAsync([FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
+    {
+        return await _commandDispatcher.Dispatch<UpdateUserCommand, Guid>(command, cancellationToken);
     }
 
     [HttpPost("login")]

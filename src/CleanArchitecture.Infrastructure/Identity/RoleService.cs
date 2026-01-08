@@ -100,6 +100,11 @@ public class RoleService : IRoleService
 
         await _context.UserRoles.Where(x => x.UserId == user.Id).ExecuteDeleteAsync();
 
+        if(roles == null || !roles.Any())
+        {
+            return;
+        }
+
         foreach (var role in roles)
         {
             await _userManager.AddToRoleAsync(user, role);
