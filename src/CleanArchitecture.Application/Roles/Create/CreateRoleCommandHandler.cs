@@ -4,7 +4,7 @@ using CleanArchitecture.Application.Dtos.Roles;
 
 namespace CleanArchitecture.Application.Roles.Create;
 
-public class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand>
+public class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand, Guid>
 {
     private readonly IRoleService _roleService;
 
@@ -13,11 +13,13 @@ public class CreateRoleCommandHandler : ICommandHandler<CreateRoleCommand>
         _roleService = roleService;
     }
 
-    public async Task Handle(CreateRoleCommand command, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateRoleCommand command, CancellationToken cancellationToken)
     {
-        await _roleService.CreateAsync(new CreateRoleRequest
+        var roleId = await _roleService.CreateAsync(new CreateRoleRequest
         {
             Name = command.Name
         });
+
+        return roleId;
     }
 }

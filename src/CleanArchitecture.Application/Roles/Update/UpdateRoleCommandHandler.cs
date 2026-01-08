@@ -4,7 +4,7 @@ using CleanArchitecture.Application.Dtos.Roles;
 
 namespace CleanArchitecture.Application.Organizations.Update;
 
-public class UpdateRoleCommandHandler : ICommandHandler<UpdateRoleCommand>
+public class UpdateRoleCommandHandler : ICommandHandler<UpdateRoleCommand, Guid>
 {
     private readonly IRoleService _roleService;
 
@@ -13,12 +13,14 @@ public class UpdateRoleCommandHandler : ICommandHandler<UpdateRoleCommand>
         _roleService = roleService;
     }
 
-    public async Task Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
     {
-        await _roleService.UpdateAsync(new UpdateRoleRequest
-        {
-            Id = command.Id,
-            Name = command.Name
-        }, cancellationToken);
+        var roleId = await _roleService.UpdateAsync(new UpdateRoleRequest
+                                                    {
+                                                        Id = command.Id,
+                                                        Name = command.Name
+                                                    }, cancellationToken);
+
+        return roleId;
     }
 }

@@ -13,6 +13,8 @@ public static class Action
 public static class Resource
 {
     public const string Users = nameof(Users);
+    public const string Roles = nameof(Roles);
+    public const string UserRoles = nameof(UserRoles);
     public const string Organizations = nameof(Organizations);
 }
 
@@ -20,10 +22,17 @@ public static class RolePermissions
 {
     private static readonly Permission[] _all =
     [
-        new("View Users", Action.View, Resource.Users),
+        new("View Users", Action.View, Resource.Users, IsBasic: true),
         new("Create Users", Action.Create, Resource.Users),
         new("Update Users", Action.Update, Resource.Users),
         new("Delete Users", Action.Delete, Resource.Users),
+
+        new("View Users", Action.View, Resource.Roles, IsBasic: true),
+        new("Create Users", Action.Create, Resource.Roles),
+        new("Update Users", Action.Update, Resource.Roles),
+        new("Delete Users", Action.Delete, Resource.Roles),
+
+        new("View UserRoles", Action.View, Resource.UserRoles, IsBasic: true),
 
         new("View Organizations", Action.View, Resource.Organizations, IsBasic: true),
         new("Create Organizations", Action.Create, Resource.Organizations),
@@ -31,7 +40,7 @@ public static class RolePermissions
         new("Delete Organizations", Action.Delete, Resource.Organizations)
     ];
 
-    public static IReadOnlyList<Permission> Admin { get; } = new ReadOnlyCollection<Permission>(_all.Where(p => !p.IsBasic).ToArray());
+    public static IReadOnlyList<Permission> Admin { get; } = new ReadOnlyCollection<Permission>(_all.ToArray());
     public static IReadOnlyList<Permission> Basic { get; } = new ReadOnlyCollection<Permission>(_all.Where(p => p.IsBasic).ToArray());
 }
 

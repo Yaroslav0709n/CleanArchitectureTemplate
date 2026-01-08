@@ -103,4 +103,16 @@ public class IdentityService : IIdentityService
 
         return permissions.Distinct().ToList();
     }
+
+    public async Task<IEnumerable<string>> GetRolesAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+
+        if (user == null)
+        {
+            throw new Exception("User not found.");
+        }
+
+        return await _userManager.GetRolesAsync(user);
+    }
 }

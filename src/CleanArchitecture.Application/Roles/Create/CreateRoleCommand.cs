@@ -2,7 +2,7 @@
 
 namespace CleanArchitecture.Application.Roles.Create;
 
-public class CreateRoleCommand : ICommand
+public class CreateRoleCommand : ICommand<Guid>
 {
     public string Name { get; set; }
 }

@@ -15,6 +15,6 @@ public class GetRolesQueryHandler : IQueryHandler<GetRolesQuery, IEnumerable<Rol
 
     public async Task<IEnumerable<RoleDto>> Handle(GetRolesQuery query, CancellationToken cancellationToken)
     {
-        return await _roleService.GetAsync(cancellationToken);
+        return await _roleService.GetListAsync(cancellationToken);
     }
 }

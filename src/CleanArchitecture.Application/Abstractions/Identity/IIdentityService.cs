@@ -11,4 +11,5 @@ public interface IIdentityService
     Task<Guid> CreateAsync(CreateUserRequest request, CancellationToken cancellationToken);
     Task<bool> HasPermissionAsync(Guid userId, string permission);
     Task<List<string>> GetPermissionsAsync(Guid userId);
+    Task<IEnumerable<string>> GetRolesAsync(Guid userId, CancellationToken cancellationToken);
 }

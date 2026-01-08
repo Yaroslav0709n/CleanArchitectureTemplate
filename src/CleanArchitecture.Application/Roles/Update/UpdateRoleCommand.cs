@@ -2,7 +2,7 @@
 
 namespace CleanArchitecture.Application.Organizations.Update;
 
-public class UpdateRoleCommand : ICommand
+public class UpdateRoleCommand : ICommand<Guid>
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

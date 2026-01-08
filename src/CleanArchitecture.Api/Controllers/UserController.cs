@@ -4,7 +4,9 @@ using CleanArchitecture.Application.Users.GetByEmail;
 using CleanArchitecture.Application.Users.GetById;
 using CleanArchitecture.Application.Users.Login;
 using CleanArchitecture.Application.Users.Register;
+using CleanArchitecture.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Action = CleanArchitecture.Infrastructure.Authorization.Action;
 
 namespace CleanArchitecture.Api.Controllers;
 
@@ -33,6 +35,15 @@ public class UserController : VersionedApiController
         var query = new GetUserByIdQuery(id);
 
         return await _queryDispatcher.Dispatch<GetUserByIdQuery, UserResponse>(query, cancellationToken);
+    }
+
+    [HttpGet("{id}/roles")]
+    [MustHavePermission(Action.View, Resource.UserRoles)]
+    public async Task<IEnumerable<string>> GetRolesAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetUserRolesQuery(id);
+
+        return await _queryDispatcher.Dispatch<GetUserRolesQuery, IEnumerable<string>>(query, cancellationToken);
     }
 
     [HttpPost("login")]
