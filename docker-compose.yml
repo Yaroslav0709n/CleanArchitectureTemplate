@@ -1,0 +1,23 @@
+services:
+  cleanarchitecture.api:
+    image: ${DOCKER_REGISTRY-}cleanarchitectureapi
+    build:
+      context: .
+      dockerfile: src/CleanArchitecture.Api/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  cleanarchitecture.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: KOMPUTER
+    environment:
+      SA_PASSWORD: "StrongP@ssw0rd!"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    ports:
+      - "1433:1433"
+
+volumes:
+  mssql_data:

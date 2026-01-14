@@ -2,5 +2,8 @@
   <Project Path="src/CleanArchitecture.Application/CleanArchitecture.Application.csproj" Id="1857f701-5b5f-4567-8424-f8f69b697613" />
   <Project Path="src/CleanArchitecture.Domain/CleanArchitecture.Domain.csproj" Id="d0ec845f-fd78-41ec-8479-60aec279129d" />
   <Project Path="src/CleanArchitecture.Infrastructure/CleanArchitecture.Infrastructure.csproj" Id="bb612613-27db-4d8e-90be-7bb0045befbf" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
   <Project Path="src/CleanArchitecture.Api/CleanArchitecture.Api.csproj" Id="47d19cac-5df6-4ca4-baba-81e8d26975f9" />
 </Solution>
